@@ -1,72 +1,46 @@
 # AI Fitness Copilot
 
-FastAPI backend for a hybrid fitness system that separates deterministic nutrition and activity analysis from recommendation generation.
+This repository is split into two top-level apps:
 
-## What is implemented
+- `backend`: FastAPI service, deterministic analysis, and LLM integration
+- `frontend`: React + Vite client UI
 
-- Async FastAPI API with SQLite-by-default and PostgreSQL-ready SQLAlchemy models
-- User, food log, activity log, and nutrition reference persistence
-- Deterministic daily nutrition aggregation and calorie expenditure estimation
-- Rule-based deficiency detection with severity scoring
-- Context building and fallback insight generation for actionable recommendations
-- Focused end-to-end test for the daily analysis workflow
+## Directory Layout
 
-## Run locally
+- `backend/` contains all Python backend code, tests, and Docker config
+- `frontend/` contains all React UI code
+- `compose.yaml` in the repo root runs backend Docker only
 
-1. Install dependencies:
+## Run Backend (Docker)
 
-   ```powershell
-   pip install -e .[dev]
-   ```
+```powershell
+docker compose up --build
+```
 
-2. Start the API:
+Backend API docs:
 
-   ```powershell
-   uvicorn app.main:app --reload
-   ```
+- http://127.0.0.1:8001/docs
 
-3. Open docs:
+## Run Frontend (Local Dev)
 
-   `http://127.0.0.1:8001/docs`
+```powershell
+cd frontend
+npm install
+npm run dev
+```
 
-## Run with Docker
+Frontend app:
 
-SQLite is file-based, so the development container uses a mounted volume for the database file instead of a separate database service.
+- http://127.0.0.1:5173
 
-1. Build and start the API:
+## Backend Local (No Docker)
 
-   ```powershell
-   docker compose up --build
-   ```
+```powershell
+cd backend
+pip install -e .[dev]
+uvicorn app.main:app --reload
+```
 
-2. Open docs:
+Backend docs (local run):
 
-   `http://127.0.0.1:8001/docs`
-
-3. Stop the stack:
-
-   ```powershell
-   docker compose down
-   ```
-
-4. Remove the persisted SQLite volume if you want a clean database:
-
-   ```powershell
-   docker compose down -v
-   ```
-
-## Key endpoints
-
-- `POST /users`
-- `POST /food-log`
-- `GET /food-log`
-- `POST /activity`
-- `GET /activity`
-- `GET /analysis/today`
-
-## Notes
-
-- The default database is local SQLite for a zero-friction start.
-- In Docker development, SQLite is persisted in the `sqlite_data` volume at `/app/data/fitness_copilot.db`.
-- Set `DATABASE_URL` to a PostgreSQL URL when moving beyond local development.
-- The insight engine is intentionally local and deterministic for now; it is the seam where an LLM provider can be added next.
+- http://127.0.0.1:8000/docs
