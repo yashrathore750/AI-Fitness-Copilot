@@ -5,9 +5,11 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.catalog import SUGGESTION_LIBRARY, WORKOUT_MET_VALUES
+from app.catalog import WORKOUT_MET_VALUES
 from app.models import ActivityLog, FoodLog, NutritionReference, User
 from app.schemas import AnalysisContext, DailyAnalysisResponse, Deficiency, InsightPayload, NutritionSummary
+from app.services.fallback_coach import build_insights
+from app.services.llm_insights import generate_llm_insights
 from app.types import Goal
 
 RDA_BASELINES = {
@@ -260,7 +262,8 @@ async def build_daily_analysis(session: AsyncSession, user_id: int, target_date:
     )
     deficiencies = detect_deficiencies(summary, user)
     context = build_context(user, summary, deficiencies, activity_logs)
-    insights = build_insights(user, summary, deficiencies)
+    # insights = build_insights(user, summary, deficiencies)
+    insights = await generate_llm_insights(context, user, user_id, target_date)
     return DailyAnalysisResponse(
         user_id=user_id,
         context=context,

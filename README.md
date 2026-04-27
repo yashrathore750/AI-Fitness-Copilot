@@ -27,7 +27,7 @@ FastAPI backend for a hybrid fitness system that separates deterministic nutriti
 
 3. Open docs:
 
-   `http://127.0.0.1:8000/docs`
+   `http://127.0.0.1:8001/docs`
 
 ## Run with Docker
 
@@ -41,7 +41,7 @@ SQLite is file-based, so the development container uses a mounted volume for the
 
 2. Open docs:
 
-   `http://127.0.0.1:8000/docs`
+   `http://127.0.0.1:8001/docs`
 
 3. Stop the stack:
 
