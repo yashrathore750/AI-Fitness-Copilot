@@ -1,0 +1,17 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-fitness-copilot-api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./data/fitness_copilot.db
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/app
+      - sqlite_data:/app/data
+
+volumes:
+  sqlite_data:
